@@ -41,19 +41,36 @@ class _CamScreenState extends State<CamScreen> {
           }
 
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(child: renderMainView()),
-              ElevatedButton(onPressed: () async{
-                if(engine !=null) {
-                  await engine!.
-                }
-                Navigator
-              }, child: Text('채널나가기'))
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(onPressed: () async{
+                  if(engine !=null) {
+                    await engine!.leaveChannel();
+                  }
+                  Navigator.of(context).pop();
+                }, child: Text('채널나가기')),
+              )
             ],
           );
         }
       ),
     );
+  }
+
+  Widget renderSubView() {
+    if(otherUid==null) {
+      return Center(
+        child: Text('채널에 유저가 없습니다.'),
+      );
+    }else {
+      return RtcRemoteView.SurfaceView(
+        uid:otherUid!,
+        channelId: CHANNEL_NAME,
+      );
+    }
   }
 
   Widget renderMainView() {
